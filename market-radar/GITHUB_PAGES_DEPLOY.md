@@ -4,6 +4,16 @@ Docker나 Synology Container Manager 설치가 막히면 GitHub Pages로 Market 
 
 이 앱은 `index.html`, `src/app.mjs`, `src/data.mjs`, `src/styles.css`로 실행되는 정적 웹앱입니다. 서버 기능 없이 브라우저에서 AI 후보군 화면을 그리므로 GitHub Pages에 잘 맞습니다.
 
+## 즉시 미리보기
+
+GitHub Pages 설정이 아직 꺼져 있어도, `gh-pages` 브랜치에 올라간 결과물은 아래 주소에서 바로 확인할 수 있습니다.
+
+```text
+https://raw.githack.com/Ryuun78/market-radar/gh-pages/index.html
+```
+
+처음 열 때 `Open the page` 버튼이 보이면 한 번 눌러 주세요. 정식 운영 주소는 아래 GitHub Pages 설정을 켠 뒤 사용하는 `https://ryuun78.github.io/market-radar/`입니다.
+
 ## 배포 방식
 
 1. GitHub 저장소에 이 프로젝트를 올립니다.
