@@ -3,71 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="AI가 주식 후보군을 압축하고 이포가 차트로 최종 선별하는 시장 레이더 앱" />
-    <title>Market Radar | AI 후보군</title>
-    <link rel="icon" href="data:," />
+    <meta http-equiv="refresh" content="0; url=https://radar.smcsc.synology.me/" />
+    <meta name="description" content="Market Radar live deployment" />
+    <title>Market Radar | Live</title>
     <style>
-      body{margin:0;background:#f5f7fb;color:#101828;font-family:Inter,Pretendard,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif}#app{min-height:100vh;display:grid;place-items:center;padding:24px}.boot{max-width:560px;border:1px solid #d8e0ec;border-radius:8px;background:#fff;padding:22px;box-shadow:0 18px 50px rgba(15,23,42,.08)}.boot b{display:block;font-size:18px}.boot p{margin:8px 0 0;color:#667085;line-height:1.5}.bar{height:6px;border-radius:999px;background:#e2e8f0;margin-top:18px;overflow:hidden}.bar i{display:block;width:38%;height:100%;border-radius:inherit;background:#0b63d8;animation:load 1.1s infinite alternate}@keyframes load{to{transform:translateX(160%)}}
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #f5f7fb;
+        color: #101828;
+        font-family: Inter, Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+      }
+      main {
+        width: min(520px, calc(100vw - 40px));
+        padding: 24px;
+        border: 1px solid #d8e0ec;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+      }
+      h1 { margin: 0; font-size: 22px; }
+      p { margin: 10px 0 18px; color: #667085; line-height: 1.6; }
+      a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0 16px;
+        border-radius: 7px;
+        background: #0b63d8;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 800;
+      }
     </style>
+    <script>
+      window.location.replace("https://radar.smcsc.synology.me/");
+    </script>
   </head>
   <body>
-    <div id="app"><div class="boot"><b>Market Radar 불러오는 중</b><p>최신 후보군, 데이터 신뢰도, 시장 필터를 조립하고 있습니다.</p><div class="bar"><i></i></div></div></div>
-    <script type="module">
-      const version = "20260510-data-reliability";
-      const files = {
-        "css": [
-                "payload/css-0.txt",
-                "payload/css-1.txt"
-        ],
-        "data": [
-                "payload/data-0.txt",
-                "payload/data-1.txt",
-                "payload/data-2.txt"
-        ],
-        "app": [
-                "payload/app-0.txt",
-                "payload/app-1.txt",
-                "payload/app-2.txt"
-        ]
-};
-      async function parts(list) {
-        const texts = await Promise.all(list.map(async (path) => {
-          const response = await fetch(path + "?v=" + version, { cache: "no-store" });
-          if (!response.ok) throw new Error(path + " " + response.status);
-          return response.text();
-        }));
-        return texts.join("").replace(/\s/g, "");
-      }
-      function healPayload(name, base64) {
-        const fixes = {
-          data: [["E2kfjrxtzv+83", "E2kfjytzv+83"]],
-          app: [
-            ["JAvzvja7dw4fTh1c", "JAvzvDATIrduja7dw4fTh1c"],
-            ["QUTQBqn4Yc7iL8D", "QUTQBqnwojgbb4Yc7iL8D"],
-          ],
-        }[name] || [];
-        return fixes.reduce((value, [from, to]) => value.replace(from, to), base64);
-      }
-      async function inflate(base64) {
-        const bytes = Uint8Array.from(atob(base64), (char) => char.charCodeAt(0));
-        const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
-        return new Response(stream).text();
-      }
-      try {
-        const [cssB64, dataB64, appB64] = await Promise.all([parts(files.css), parts(files.data), parts(files.app)]);
-        const [css, dataSource, appSource] = await Promise.all([inflate(cssB64), inflate(healPayload("data", dataB64)), inflate(healPayload("app", appB64))]);
-        const style = document.createElement("style");
-        style.textContent = css;
-        document.head.append(style);
-        const dataUrl = URL.createObjectURL(new Blob([dataSource], { type: "text/javascript" }));
-        const appUrl = URL.createObjectURL(new Blob([
-          appSource.replace('from "./data.mjs";', 'from "' + dataUrl + '";'),
-        ], { type: "text/javascript" }));
-        await import(appUrl);
-      } catch (error) {
-        console.error(error);
-        document.querySelector("#app").innerHTML = '<main style="padding:24px;font-family:system-ui,sans-serif"><h1>Market Radar를 불러오지 못했습니다.</h1><p>브라우저 새로고침 후 다시 열어 주세요.</p></main>';
-      }
-    </script>
+    <main>
+      <h1>Market Radar 운영판으로 이동합니다</h1>
+      <p>GitHub Pages는 정적 공개 입구이고, 실시간 차트 API가 켜진 운영판은 새만금시니어클럽 NAS에서 실행됩니다.</p>
+      <a href="https://radar.smcsc.synology.me/">운영판 열기</a>
+    </main>
   </body>
 </html>
