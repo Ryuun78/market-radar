@@ -38,6 +38,16 @@
         }));
         return texts.join("").replace(/\s/g, "");
       }
+      function healPayload(name, base64) {
+        const fixes = {
+          data: [["E2kfjrxtzv+83", "E2kfjytzv+83"]],
+          app: [
+            ["JAvzvja7dw4fTh1c", "JAvzvDATIrduja7dw4fTh1c"],
+            ["QUTQBqn4Yc7iL8D", "QUTQBqnwojgbb4Yc7iL8D"],
+          ],
+        }[name] || [];
+        return fixes.reduce((value, [from, to]) => value.replace(from, to), base64);
+      }
       async function inflate(base64) {
         const bytes = Uint8Array.from(atob(base64), (char) => char.charCodeAt(0));
         const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
@@ -45,7 +55,7 @@
       }
       try {
         const [cssB64, dataB64, appB64] = await Promise.all([parts(files.css), parts(files.data), parts(files.app)]);
-        const [css, dataSource, appSource] = await Promise.all([inflate(cssB64), inflate(dataB64), inflate(appB64)]);
+        const [css, dataSource, appSource] = await Promise.all([inflate(cssB64), inflate(healPayload("data", dataB64)), inflate(healPayload("app", appB64))]);
         const style = document.createElement("style");
         style.textContent = css;
         document.head.append(style);
